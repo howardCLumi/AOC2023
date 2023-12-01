@@ -1,0 +1,25 @@
+{
+  "name": "2023",
+  "version": "1.0.0",
+  "description": "Advent of Code 2023",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/howardCLumi/AOC2023.git"
+  },
+  "keywords": [
+    "Javascript",
+    "Node"
+  ],
+  "cwd": "${fileDirname}",
+  "author": "Howard Chi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/howardCLumi/AOC2023/issues"
+  },
+  "homepage": "https://github.com/howardCLumi/AOC2023#readme"
+}
