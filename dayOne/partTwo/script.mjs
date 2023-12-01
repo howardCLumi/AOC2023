@@ -1,13 +1,21 @@
-import { fileURLToPath } from "node:url";
 import { readFile } from "node:fs/promises";
-import path from "node:path";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const filePath = path.resolve(__dirname, "../input.txt");
-const input = await readFile(filePath, "utf-8");
+const input = await readFile("../input.txt", "utf-8");
 const array = input.split(/\r?\n/).map((line) => line.replace(/\r/g, ""));
 let sum = 0;
+
+const numbers = {
+  zero: 0,
+  one: 1,
+  two: 2,
+  three: 3,
+  four: 4,
+  five: 5,
+  six: 6,
+  seven: 7,
+  eight: 8,
+  nine: 9,
+};
 
 for (const line of array) {
   sum += Number(findNumbers(line));
@@ -16,12 +24,17 @@ for (const line of array) {
 console.log(sum);
 
 function findNumbers(line) {
-  let numbers = [];
+  let arrayOfNumbers = [];
+  let example = line;
 
-  for (const char of line) {
+  for (let num in numbers) {
+    example = example.replaceAll(num, num + numbers[num] + num);
+  }
+
+  for (const char of example) {
     if (!isNaN(Number(char))) {
-      numbers.push(char);
+      arrayOfNumbers.push(char);
     }
   }
-  return numbers[0] + numbers[numbers.length - 1];
+  return arrayOfNumbers[0] + arrayOfNumbers[arrayOfNumbers.length - 1];
 }
