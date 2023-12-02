@@ -3,28 +3,22 @@ import { readFile } from "node:fs/promises";
 const input = await readFile("../input.txt", "utf-8");
 const array = input.split(/\r?\n/).map((line) => line.replace(/\r/g, ""));
 const CUBES = { blue: 14, red: 12, green: 13 };
-let sumID = 0;
-let gameID = 0;
+let sumPower = 0;
+let gamePower = 1;
 
 for (const line of array) {
   const cubes = line.split(/[;,:]+/);
   const gameCubes = sortCubes(cubes);
   let keys = Object.keys(CUBES);
-  let fairGame = true;
-  gameID += 1;
+  gamePower = 1;
 
   for (let i = 0; i < 3; ++i) {
     let key = keys[i];
-    if (gameCubes[key] > CUBES[key]) {
-      fairGame = false;
-      break;
-    }
+    gamePower *= gameCubes[key];
   }
-  if (fairGame) {
-    sumID += gameID;
-  }
+  sumPower += gamePower;
 }
-console.log(sumID);
+console.log(sumPower);
 
 function sortCubes(cubes) {
   const gameCubes = {};
