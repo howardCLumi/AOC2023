@@ -3,24 +3,24 @@ import { join } from "node:path";
 
 const input = await readFile("../input.txt", "utf-8");
 const SCHEMATIC = input.split(/\r?\n/).map((line) => line.replace(/\r/g, ""));
-const specialChar = /[^a-zA-Z0-9.]/;
+const specialChar = "*";
 
 function main() {
-  const engineNumSum = findEngineNumSum(SCHEMATIC);
-  console.log(engineNumSum);
+  const gearRatioSum = findEngineNumSum(SCHEMATIC);
+  console.log(gearRatioSum);
 }
 
 function findEngineNumSum(schematic) {
-  let engineNumSum = 0;
+  let gearRatioSum = 0;
   for (let i = 0; i < schematic.length; i++) {
     for (let j = 0; j < schematic[i]?.length; j++) {
-      if (specialChar.test(schematic[i][j])) {
+      if (schematic[i][j] == specialChar) {
         const { numberResult, arrayResult } = addNumbers(
           schematic,
           [schematic[i - 1], schematic[i], schematic[i + 1]],
           j
         );
-        engineNumSum += numberResult;
+        gearRatioSum += numberResult;
         for (let k = 0; k < arrayResult.length; k++) {
           if (arrayResult !== undefined) {
             schematic[i - 1 + k] = arrayResult[k];
@@ -29,41 +29,44 @@ function findEngineNumSum(schematic) {
       }
     }
   }
-  return engineNumSum;
+  return gearRatioSum;
 }
 
 function addNumbers(schematic, schematicLines, specialIndex) {
   let sum = 0;
+  const totalNumberArray = [];
+  let gearRatio = 0;
 
   for (let i = 0; i < schematicLines.length; i++) {
     if (schematicLines[i] !== undefined) {
-      const { numberResult, stringResult } = checkNearbyNums(
+      const { arrayResult, stringResult } = checkNearbyNums(
         schematic,
         schematicLines[i],
         specialIndex
       );
-      sum += numberResult;
+
       if (schematicLines[i] !== undefined) {
         schematicLines[i] = stringResult;
       }
+      totalNumberArray.push(...arrayResult);
     }
   }
-  return { numberResult: sum, arrayResult: schematicLines };
+  if (totalNumberArray.length == 2) {
+    gearRatio = totalNumberArray[0] * totalNumberArray[1];
+  }
+  return { numberResult: gearRatio, arrayResult: schematicLines };
 }
 
 function checkNearbyNums(schematic, line, specialIndex) {
-  let sumOfNearbyNums = 0;
-
+  let numberArray = [];
   for (let i = -1; i < 2; i++) {
     if (!isNaN(Number(line[specialIndex + i]))) {
       const { arrayResult, stringResult } = findNum(line, specialIndex + i);
-      for (const num of arrayResult) {
-        sumOfNearbyNums += Number(num);
-      }
       line = stringResult;
+      numberArray.push(...arrayResult);
     }
   }
-  return { numberResult: sumOfNearbyNums, stringResult: line };
+  return { arrayResult: numberArray, stringResult: line };
 }
 
 function findNum(line, specialIndex) {
@@ -94,7 +97,6 @@ function findNum(line, specialIndex) {
   }
 
   line = arrayLine.join("");
-
   return { arrayResult: nums, stringResult: line };
 }
 
