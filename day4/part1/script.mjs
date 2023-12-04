@@ -21,24 +21,11 @@ function calculateGamePoints(cardNumbers) {
   const winningNumbers = cardNumbers[0];
   const playerNumbers = cardNumbers[1];
   let gamePoints = 0;
-  const matchingNumbers = [];
-  let matchingNumber = 0;
 
   for (const number of playerNumbers) {
-    winningNumbers.includes(number)
-      ? gamePoints !== 0
-        ? (gamePoints *= 2) &&
-          (matchingNumber += 1) &&
-          matchingNumbers.push(number)
-        : (gamePoints = 1) &&
-          (matchingNumber += 1) &&
-          matchingNumbers.push(number)
-      : undefined;
+    if (!winningNumbers.includes(number)) continue;
+    gamePoints = gamePoints === 0 ? 1 : gamePoints * 2;
   }
-  console.log(cardNumbers);
-  console.log(matchingNumber);
-  console.log(matchingNumbers);
-  process.exit();
   return gamePoints;
 }
 
@@ -50,7 +37,7 @@ function formatLotteryCards(input) {
   for (const game of inputFormatted) {
     const gameFormatted = game.split(/:|\|/);
 
-    lotteryGames[gameFormatted[0].split(" ")[1]] = [
+    lotteryGames[gameFormatted[0].split(" ").pop()] = [
       gameFormatted[1].split(" ").filter((value) => value !== ""),
       gameFormatted[2].split(" ").filter((value) => value !== ""),
     ];
